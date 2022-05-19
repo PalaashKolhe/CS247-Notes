@@ -222,3 +222,25 @@ for (auto x: l) {cout << x << endl;}
 
 Variable x is a local copy of the value returned by dereferencing each iterator
 
+It prints 1,2,3 because in these loops, `x` is a fixed variable whose value is a copy of dereferencing the iterator each step.
+
+```cpp
+for (auto &x:l) {
+  // only if operator& for the iterator returns a reference
+  ++x;
+}
+
+// over here can be auto& or auto, either works
+for (auto &x:l) {
+  cout << x << endl;
+  // now prints 2 3 4
+}
+```
+
+The `for(... : ...)` is called a range based for loop and it can be used IF `for (x:C)`, C is a type `T` that defines functions `begin()` and `end()` which return a type `Q`.
+
+Type `Q` must have defined
+- Prefix increment operator
+- Dereference operator
+- Inequality operator
+
