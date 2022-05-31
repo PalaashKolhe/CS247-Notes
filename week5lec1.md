@@ -125,4 +125,90 @@ Happens in the opposite direction of object initialization
 ### In our example
 Since `student` has no default ctor, we **must** specify how to initialize it in the MIL as the compiler doesn't know how to initialize it otherwise. 
 
+```cpp
+// courses.h
+class Course {
+    // ...
+    public: 
+        int enrolledFees() {
+            int x = 0;
+            for (int i=0; i<curEnrolled; ++i) {
+                x += enrolled[i]->fees();
+            }
+            return x;
+        }
+}
+```
+
+```cpp
+// main.cc
+int main() {
+    CoopStudent a{0, "a"};
+    Student b{1, "b"};
+
+    CS247.enrolled(&a);
+    CS247.enrolled(&b);
+
+
+    a.enroll(&CS247); b.enroll(&CS247);
+    cout << CS247.enrolledFees() << endl;
+    // prints 6000, not 8000
+}
+```
+
+## What went wrong?
+Courses `enrolled` array was an array of `Student` *'s. But we stuck a ptr to a `CoopStudent` in there. How did we do this?
+
+That is the beauty of public inheritance. A `CoopStudent` **is a** `Student`, so a `Student` ptr can point to a `CoopStudent`.
+
+So, we can work polymorphically on different kinds of students through `Student` *'s, except that's not what we got. Instead, we got the behaviour of a regular `Student`. We got the fee for a regular student rather than a coop student. 
+
+The compiler chooses which `fn fees` to run based on the static type of the data in the array. 
+
+```cpp
+cout << a.fees() << endl;
+```
+
+gives 5000, because the compiler sees `a`'s type is CoopStudent, and so it calls `CoopStudent::fees()`. 
+
+But in `course::enrolledFees()`, we are operating on `Student` *'s. So it calls `Student::fees()` regardless of what type the pointer actually points at. 
+
+## How do we solve this?
+
+We need to solve this so the compiler chooses the method based on the actual runtime type of the object and **not** the static type. 
+
+***Solution***: Declare the method virtual
+
+```cpp
+class Student {
+    // ... as before
+    public:
+        virtual int fees();
+}
+```
+
+All of a sudden we get the behaviour we want. The fees called on `Student` *'s calls the appropriate method based on the run-time type of the object, but **how is this possible?**
+
+## Compiler leaves secrets
+
+```cpp
+// Before fees was virtual
+cout << sizeof(Student) << " " << sizeof(CoopStudent) << endl;
+    // printed 48 48
+
+// After fees was virtual
+cout << sizeof(Student) << " " << sizeof(CoopStudent) << endl;
+    // printed 56 56
+```
+
+Adding the virtual function made our object larger by **1 pointer (8 bytes)**.
+
+**Note:** C++ standard only specifies that the compiler must implement polymorphic behaviour of virtual functions through base class pointers and references. *It does not specify how the compiler must do this.*
+
+However, virtually all compilers implement it this way.
+
+## Why are our objects a pointer larger?
+The compiler knows it may be asked to call this virtual function through a base class pointer or ref, and it must figure out which one to call. 
+
+So, every time the compiler creates an object of a class with a virtual method, it sticks an extra pointer in there. 
 
