@@ -143,13 +143,13 @@ main : main.o vec.o basis.o
 \t g++ main.o vec.o basis.o -o main
 
 main.o : main.cc basis.h vec.h
-\t git -std=c++14 -c main.cc
+\t g++ -std=c++14 -c main.cc
 
 basis.o : basis.cc basis.h vec.h
-\t git -std=c++14 -c basis.cc
+\t g++ -std=c++14 -c basis.cc
 
 vec.o : vec.cc vec.h
-\t git -std=c++14 -c vec.cc
+\t g++ -std=c++14 -c vec.cc
 ```
 
 **Notes**  -
