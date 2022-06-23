@@ -101,7 +101,7 @@ Two useful preprocessor directives are
 2. `ifndef FLAGNAME`
    - ```ifndef FLAGNAME \n ... \n endif```
    - If FLAGNAME is not defined, everything within the if stays in your program.
-   - If it is not defined, everything contained is removed before the compiler see's it.
+   - If it is defined, everything contained is removed before the compiler see's it.
 
 
 Solution:
