@@ -168,7 +168,7 @@ class AbstractBook {
     string title, author;
 
     protected:
-        Abstract Book & operator= (const AbstractBook & other);
+        AbstractBook & operator= (const AbstractBook & other);
     public:
         ...
         virtual ~AbstractBook = 0;
