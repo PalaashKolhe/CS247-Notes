@@ -194,7 +194,7 @@ AbstractBook::~AbstractBook() {}
 ```cpp
 class RegularBook : public AbstractBook {
     public:
-        RegularBook &operator(const RegularBook &);
+        RegularBook &operator=(const RegularBook &);
 };
 
 // comic and Text are similar
