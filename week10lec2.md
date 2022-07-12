@@ -70,7 +70,7 @@ Derived classes override that to play their various media types. Disney sues you
 Rather than adding the check to each derived classes `play` methods, if we follow NVI we can ensure `checkDRM()` is called in our non-virtual play method before dispatching to a virtual helper. 
 
 ```cpp
-// translated to NVE
+// translated to NVI
 class DigitalMedia {
     virtual void doPlay() = 0;
     void checkDRM() {....}
