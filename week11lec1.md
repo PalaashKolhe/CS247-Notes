@@ -199,6 +199,8 @@ Casting is usually the **wrong** thing to do. It is usually indicative of a desi
 
 `static_cast` for meaningful casts with well defined conversions. Eg. int to float
 
+***Derived class to base class***
+
 ```cpp
 int x = 5;
 float f = static_cast<float>(x);
