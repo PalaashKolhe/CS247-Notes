@@ -2,7 +2,7 @@
 
 ## Templates and Functions
 ```cpp
-template<typename Itr, typename Ret>
+template<typename Iter, typename Ret>
 Ret Sum(Iter start, Iter end) {
     Ret sum {}; // primitize types zero init with empty initializer call
 
